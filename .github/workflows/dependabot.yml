@@ -1,0 +1,33 @@
+---
+# This is a Terraform-managed file; manual changes will be overwritten.
+# https://github.com/vpc-dev/github-organization/blob/main/templates/workflows/dependabot.yml
+
+# This is the workflow to automatically approve and merge dependabot PRs
+
+name: "Chore: Dependabot Auto Merge"
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  dependabot:
+    name: '🤖 Dependabot Automation'
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+
+    steps:
+      - name: '☁️ Checkout Repository'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: '🤖 Dependabot Auto Merge'
+        uses: ahmadnassri/action-dependabot-auto-merge@v2.6.6
+        with:
+          target: minor
+          github-token: ${{ secrets.VPC_BOT_DEPENDBOT_TOKEN  }}
+          command: squash and merge
