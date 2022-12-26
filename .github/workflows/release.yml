@@ -1,0 +1,46 @@
+---
+# This is a Terraform-managed file; manual changes will be overwritten.
+# https://github.com/vpc-dev/github-organization/blob/main/templates/workflows/release.yml
+
+name: "Chore: Release"
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tpl'
+      - '**/*.py'
+      - '**/*.tf'
+      - '.github/workflows/release.yml'
+
+jobs:
+  release:
+    name: '🏷️ Release'
+    runs-on: ubuntu-latest
+    # Skip running release workflow on forks
+    if: github.repository_owner == 'vpc-dev'
+    steps:
+      - name: '☁️ Checkout Repository'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      # see https://github.com/marketplace/actions/action-for-semantic-release
+      - name: '📦 Release'
+        uses: cycjimmy/semantic-release-action@v3.2.0
+        with:
+          semantic_version: 19.0.0
+          branches: ['main']
+          extra_plugins: |
+            @semantic-release/changelog@6.0.0
+            @semantic-release/git@10.0.0
+            conventional-changelog-conventionalcommits@4.6.3
+        env:
+          # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/ci-configuration.md#authentication
+          GH_TOKEN: ${{ secrets.VPC_BOT_SEMANTIC_RELEASE_TOKEN }}
+
+...
