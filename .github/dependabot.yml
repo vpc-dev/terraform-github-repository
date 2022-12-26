@@ -1,0 +1,12 @@
+---
+# This is a Terraform-managed file; manual changes will be overwritten.
+# https://github.com/vpc-dev/github-organization/blob/main/templates/.github/dependabot.yml
+
+version: 2
+updates:
+ - package-ecosystem: "terraform"
+   directory: "/"
+   schedule:
+     interval: daily
+
+...
