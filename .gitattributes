@@ -1,0 +1,6 @@
+# Enforce Unix newlines
+* text=auto eol=lf
+
+# Explicitly declare text files we want to always be normalized and converted
+# to native line endings on checkout.
+*.md text diff=markdown
