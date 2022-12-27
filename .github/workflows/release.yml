@@ -40,10 +40,11 @@ jobs:
           # semantic_version: 19.0.0
           #cbranches: "main"
           extra_plugins: |
-            @semantic-release/changelog@6.0.0
-            @semantic-release/github@8.07
-            @semantic-release/git@10.0.1
-            conventional-changelog-conventionalcommits@4.6.3
+            @semantic-release/commit-analyzer
+            @semantic-release/changelog
+            @semantic-release/github
+            @semantic-release/git
+            conventional-changelog-conventionalcommits
         env:
           # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/ci-configuration.md#authentication
           GH_TOKEN: ${{ secrets.VPC_BOT_SEMANTIC_RELEASE_TOKEN }}
