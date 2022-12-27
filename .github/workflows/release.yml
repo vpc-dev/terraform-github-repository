@@ -37,14 +37,11 @@ jobs:
       - name: '📦 Release'
         uses: cycjimmy/semantic-release-action@v3.2.0
         with:
-          # semantic_version: 19.0.0
-          #cbranches: "main"
+          semantic_version: 18.0.0
           extra_plugins: |
-            @semantic-release/commit-analyzer
-            @semantic-release/changelog
-            @semantic-release/github
-            @semantic-release/git
-            conventional-changelog-conventionalcommits
+            @semantic-release/changelog@6.0.0
+            @semantic-release/git@10.0.0
+            conventional-changelog-conventionalcommits@4.6.3
         env:
           # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/ci-configuration.md#authentication
           GH_TOKEN: ${{ secrets.VPC_BOT_SEMANTIC_RELEASE_TOKEN }}
