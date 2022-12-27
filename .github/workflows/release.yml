@@ -37,7 +37,7 @@ jobs:
       - name: '📦 Release'
         uses: cycjimmy/semantic-release-action@v3.2.0
         with:
-          semantic_version: 18.0.0
+          semantic_version: 19.0.0
           branches: |
             main
           extra_plugins: |
