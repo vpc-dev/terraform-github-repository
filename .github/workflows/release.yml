@@ -33,11 +33,11 @@ jobs:
       - name: '📦 Release'
         uses: cycjimmy/semantic-release-action@v3.2.0
         with:
-          # semantic_version: 19.0.0
-          branches: [
-            '+([0-9])?(.{+([0-9]),x}).x',
-            'main'
-          ]
+          semantic_version: 19.0.0
+          #branches: [
+          #  '+([0-9])?(.{+([0-9]),x}).x',
+          #  'main'
+          #]
           extra_plugins: |
             @semantic-release/changelog@6.0.0
             @semantic-release/git@10.0.0
