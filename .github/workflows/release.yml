@@ -19,7 +19,11 @@ on:
 jobs:
   release:
     name: '🏷️ Release'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
     # Skip running release workflow on forks
     if: github.repository_owner == 'vpc-dev'
     steps:
@@ -33,14 +37,14 @@ jobs:
       - name: '📦 Release'
         uses: cycjimmy/semantic-release-action@v3.2.0
         with:
-          semantic_version: 19.0.0
-          #branches: [
-          #  '+([0-9])?(.{+([0-9]),x}).x',
-          #  'main'
-          #]
+          # semantic_version: 19.0.0
+          branches: [
+            "main",
+          ]
           extra_plugins: |
             @semantic-release/changelog@6.0.0
-            @semantic-release/git@10.0.0
+            @semantic-release/github@8.07
+            @semantic-release/git@10.0.1
             conventional-changelog-conventionalcommits@4.6.3
         env:
           # see https://github.com/semantic-release/semantic-release/blob/master/docs/usage/ci-configuration.md#authentication
