@@ -1,0 +1,139 @@
+---
+# This is a Terraform-managed file; manual changes will be overwritten.
+# https://github.com/vpc-dev/github-organization/blob/main/templates/.releaserck.yml
+
+branches: [
+  "main"
+]
+ci: false
+debug: true
+dryRun: false
+# see https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit
+# and https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular
+preset: "angular"
+tagFormat: "${version}"
+
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/changelog"
+  - "@semantic-release/git"
+  - "@semantic-release/github"
+
+# Responsible for verifying conditions necessary to proceed with the release:
+# configuration is correct, authentication token are valid, etc...
+verifyConditions:
+  - '@semantic-release/changelog'
+  - '@semantic-release/git'
+  - '@semantic-release/github'
+
+# Responsible for determining the type of the next release (major, minor or patch).
+# If multiple plugins with a analyzeCommits step are defined, the release type will be
+# the highest one among plugins output.
+# see https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit
+# and https://github.com/semantic-release/commit-analyzer#configuration
+# and https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular
+analyzeCommits:
+  - path: '@semantic-release/commit-analyzer'
+    releaseRules:
+      # Major release
+      - type: breaking  # Changes that break something makes something incompatible to earlier version
+        release: major
+
+      # Minor release
+      - type: feat      # A new feature
+        release: minor
+
+      # Patch release
+      - type: build     # Changes that affect the build system or external dependencies
+        release: patch
+      - type: fix       # A bug fix
+        release: patch
+      - type: perf      # A code change that improves performance
+        release: patch
+      - type: revert    # Reverts a previous commit
+        release: patch
+
+      # No release
+      - type: chore     # Other changes that don't modify src or test files
+        release: false
+      - type: ci        # Changes to our CI configuration files and scripts
+        release: false
+      - type: docs      # Documentation only changes
+        release: false
+      - type: refactor  # A code change that neither fixes a bug nor adds a feature
+        release: false
+      - type: style     # Changes that do not affect the meaning of the code
+        release: false
+      - type: test      # Adding missing tests or correcting existing tests
+        release: false
+
+# Responsible for generating the content of the release note.
+# If multiple plugins with a generateNotes step are defined,
+# the release notes will be the result of the concatenation of each plugin output.
+generateNotes:
+  - path: '@semantic-release/release-notes-generator'
+    writerOpts:
+      groupBy: 'type'
+      commitGroupsSort: 'title'
+      commitsSort: 'header'
+    linkCompare: true
+    linkReferences: true
+    presetConfig:
+      types:  # looks like it only works with 'conventionalcommits' preset
+        - type: 'breaking'
+          section: '🧨 Breaking changes!'
+          hidden: false
+        - type: 'build'
+          section: '🦊 CI/CD'
+          hidden: false
+        - type: 'chore'
+          section: 'Other'
+          hidden: false
+        - type: 'ci'
+          section: '🦊 CI/CD'
+          hidden: false
+        - type: 'docs'
+          section: '📔 Docs'
+          hidden: false
+        - type: 'feat'
+          section: '🚀 Features'
+          hidden: false
+        - type: 'fix'
+          section: '🛠 Fixes'
+          hidden: false
+        - type: 'perf'
+          section: '⏩ Performance'
+          hidden: false
+        - type: 'refactor'
+          section: ':scissors: Refactor'
+          hidden: false
+        - type: 'revert'
+          section: '👀 Reverts'
+          hidden: false
+        - type: 'style'
+          section: '💈 Style'
+          hidden: false
+        - type: 'test'
+          section: '🧪 Tests'
+          hidden: false
+
+# Responsible for preparing the release, for example creating or updating files
+# such as package.json, CHANGELOG.md, documentation or compiled assets
+# and pushing a commit.
+prepare:
+  - path: '@semantic-release/changelog'
+    # Create or update the changelog file in the local project repository
+  - path: '@semantic-release/git'
+    # Push a release commit and tag, including configurable files
+    message: 'RELEASE: ${nextRelease.version}'
+    assets: ['CHANGELOG.md']
+
+publish:
+  - path: "@semantic-release/github"
+
+success:
+  - "@semantic-release/github"
+
+fail:
+  - "@semantic-release/github"
